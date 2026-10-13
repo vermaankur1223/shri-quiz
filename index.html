@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shri Quiz App</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eaf2ff;
+  text-align: center;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 15px;
+  max-width: 450px;
+  margin: 30px auto;
+  box-shadow: 0 4px 12px #0002;
+}
+button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: #1769dd;
+  color: white;
+  font-size: 16px;
+}
+button:disabled { opacity: .6; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🇮🇳 Shri Quiz App</h1>
+  <p>Class 12 | NDA | JEE | NEET</p>
+  <h3 id="question"></h3>
+  <div id="options"></div>
+  <p id="feedback"></p>
+  <button id="next" onclick="nextQuestion()" hidden>
+    Next Question →
+  </button>
+  <h3 id="score"></h3>
+</div>
+<script>
+const questions = [
+  {
+    q: "What is the derivative of x²?",
+    options: ["x", "2x", "x²", "2"],
+    answer: 1
+  },
+  {
+    q: "What is the SI unit of force?",
+    options: ["Joule", "Watt", "Newton", "Pascal"],
+    answer: 2
+  },
+  {
+    q: "What is the chemical formula of water?",
+    options: ["CO2", "H2O", "O2", "NaCl"],
+    answer: 1
+  }
+];
+
+let index = 0;
+let marks = 0;
+
+function showQuestion() {
+  const item = questions[index];
+  document.getElementById("question").textContent =
+    (index + 1) + ". " + item.q;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("next").hidden = true;
+
+  const box = document.getElementById("options");
+  box.innerHTML = "";
+
+  item.options.forEach((option, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = option;
+    btn.onclick = () => checkAnswer(i);
+    box.appendChild(btn);
+  });
+}
+
+function checkAnswer(selected) {
+  const item = questions[index];
+  const buttons = document.querySelectorAll("#options button");
+  buttons.forEach(btn => btn.disabled = true);
+
+  if (selected === item.answer) {
+    marks++;
+    document.getElementById("feedback").textContent =
+      "✅ Correct Answer!";
+  } else {
+    document.getElementById("feedback").textContent =
+      "❌ Correct: " + item.options[item.answer];
+  }
+  document.getElementById("next").hidden = false;
+}
+
+function nextQuestion() {
+  index++;
+  if (index < questions.length) {
+    showQuestion();
+  } else {
+    document.getElementById("question").textContent =
+      "Quiz Completed! 🎉";
+    document.getElementById("options").innerHTML = "";
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("next").hidden = true;
+    document.getElementById("score").textContent =
+      "Your Score: " + marks + "/" + questions.length;
+  }
+}
+
+showQuestion();
+</script>
+</body>
+</html>
+
